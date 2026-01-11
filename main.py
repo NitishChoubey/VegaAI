@@ -58,12 +58,35 @@ def vega_suggest(request: VegaRequest):
     Assistive AI endpoint.
     Returns suggestions only.
     No autonomous actions.
+    
+    Returns:
+        JSON response with suggestions, status, and metadata
     """
     logger.info(f"Received request for trip_id={request.trip_id}, city={request.city}, country={request.country}")
     try:
         result = run_vega(request)
         logger.info(f"Successfully generated suggestions for trip_id={request.trip_id}")
-        return result
+        
+        # Ensure we always return a properly structured response
+        response = {
+            "success": True,
+            "trip_id": request.trip_id,
+            "city": request.city,
+            "country": request.country,
+            "day": request.day,
+            "time_slot": request.time_slot,
+            "suggestions": result.get("suggestions", []),
+            "message": f"Generated {len(result.get('suggestions', []))} suggestions"
+        }
+        return response
     except Exception as e:
         logger.error(f"Error generating suggestions: {str(e)}")
-        raise
+        return {
+            "success": False,
+            "trip_id": request.trip_id,
+            "city": request.city,
+            "country": request.country,
+            "suggestions": [],
+            "error": str(e),
+            "message": "Failed to generate suggestions"
+        }
