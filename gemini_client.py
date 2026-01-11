@@ -21,7 +21,7 @@ class GeminiClient:
         genai.configure(api_key=api_key)
         
         # Using Gemini Flash model (Fast and efficient)
-        self.model = genai.GenerativeModel('gemini-1.5-flash-latest')
+        self.model = genai.GenerativeModel('gemini-2.5-flash')
 
     def generate(self, system_prompt: str, user_prompt: str) -> str:
         """

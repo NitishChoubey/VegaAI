@@ -75,8 +75,12 @@ def vega_suggest(request: VegaRequest):
             "country": request.country,
             "day": request.day,
             "time_slot": request.time_slot,
+            "adults": request.adults,
+            "children": request.children,
+            "total_budget": request.total_budget,
+            "remaining_budget": request.remaining_budget,
             "suggestions": result.get("suggestions", []),
-            "message": f"Generated {len(result.get('suggestions', []))} suggestions"
+            "message": f"Generated {len(result.get('suggestions', []))} suggestions for {request.adults} adult(s) and {request.children} child(ren)"
         }
         return response
     except Exception as e:
@@ -86,6 +90,8 @@ def vega_suggest(request: VegaRequest):
             "trip_id": request.trip_id,
             "city": request.city,
             "country": request.country,
+            "adults": request.adults,
+            "children": request.children,
             "suggestions": [],
             "error": str(e),
             "message": "Failed to generate suggestions"
