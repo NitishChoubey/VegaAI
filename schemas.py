@@ -10,11 +10,20 @@ class VegaRequest(BaseModel):
     total_budget: float
     remaining_budget: float
     preferences: Optional[List[str]] = []
+    # NEW FIELDS 👇
+    adults: int = 1
+    children: int = 0
 
 class VegaSuggestion(BaseModel):
     title: str
     description: str
     reason: str
+    # NEW FIELDS 👇
+    estimated_price_adult: float
+    estimated_price_child: float
+    currency: str
+    min_age: int
+    is_child_allowed: bool
 
 class VegaResponse(BaseModel):
     suggestions: List[VegaSuggestion]
