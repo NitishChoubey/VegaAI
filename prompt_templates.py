@@ -41,15 +41,14 @@ Every suggestion must include:
 DAY_ACTIVITY_PROMPT = """
 TASK:
 Suggest 3 to 5 suitable activities for the given day and time slot.
+You MUST estimate the cost per person in {country}'s local currency or USD.
 
 TRIP CONTEXT:
 City: {city}
 Country: {country}
-Day: {day}
-Time Slot: {time_slot}
-
-BUDGET:
-Remaining Budget: {remaining_budget}
+Group: {adults} Adults, {children} Children
+Day: {day} ({time_slot})
+Budget Remaining: {remaining_budget}
 
 USER PREFERENCES:
 {preferences}
@@ -58,17 +57,23 @@ ENFORCED RULES:
 {rules}
 
 OUTPUT INSTRUCTIONS:
-You MUST return the response in strict JSON format. 
-Do NOT use Markdown code blocks (like ```json). 
-Just return the raw JSON object.
+Return STRICT JSON only.
+1. Estimate `estimated_price_adult` and `estimated_price_child`.
+2. If the activity is free, set price to 0.
+3. If children are NOT allowed (e.g., bars, clubs, 18+), set `is_child_allowed` to false and `estimated_price_child` to 0.
 
-The JSON structure must be:
+JSON Structure:
 {{
   "suggestions": [
     {{
       "title": "Activity Name",
-      "description": "Short description (1-2 lines)",
-      "reason": "Why it fits this plan"
+      "description": "Short description",
+      "reason": "Why it fits",
+      "estimated_price_adult": 25.0,
+      "estimated_price_child": 15.0,
+      "currency": "EUR",
+      "min_age": 0,
+      "is_child_allowed": true
     }}
   ]
 }}
